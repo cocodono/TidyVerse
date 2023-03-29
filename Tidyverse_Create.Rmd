@@ -1,0 +1,74 @@
+---
+title: "Tidyverse Create"
+author: "Coco Donovan"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+## Introduction:
+Text
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Loading/Installing Packages
+
+```{r}
+library(ggplot2)
+library(dplyr)
+#tidyr
+library(readr)
+#purrr
+#tibble
+library(stringr)
+#forcats
+```
+
+## readr
+
+I used the read_csv() function to read in my csv of NCAA Women's Basketball 
+roster info. Within read_csv() I used the col_types argument to change data types
+of certain columns. Initially the columns that I changed inside read_csv() were
+chr type, but to do meaningful analysis I needed to make them numerical, hence 
+setting them to col_double() (which sets the data type of the column to a double).
+This same logic can be applied to 
+```{r}
+ncaa_wbb_rosters <- read_csv('https://raw.githubusercontent.com/Sports-Roster-Data/womens-college-basketball/main/wbb_rosters_2022_23.csv', col_types = list(total_inches = col_double(), height_ft = col_double(), height_in = col_double()))
+
+colnames(ncaa_wbb_rosters)
+
+mean(ncaa_wbb_rosters$total_inches, na.rm = TRUE)
+
+ncaa_wbb_rosters$total_inches <- col_double(ncaa_wbb_rosters$total_inches)
+```
+
+
+
+```{r}
+
+```
+
+## dyplr
+
+### distinct()
+
+I am unsure what values the redshirt column could possibly take on, so I use a 
+pipe and the distinct() function to highlight the possible values 'redshirt' may 
+take on. I find that redshirt can either be 1, for "yes, a student athlete was 
+redshirted," or 0, for "no, a student athlete was not redshirted."
+
+```{r}
+ncaa_wbb_rosters %>%
+  distinct(redshirt)
+```
+
+
+
+```{r}
+summary_table <- ncaa_wbb_rosters %>%
+  select('team', 'player_id', 'total_inches', 'country_clean', 'state_clean') %>%
+  group_by(team) %>%
+  summarize()
+
+```
